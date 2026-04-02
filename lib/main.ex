@@ -58,7 +58,7 @@ defmodule Bencode do
     [int_str, remaining] = String.split(rest, "e", parts: 2)
     Logger.debug("Bencode.decode: decoding integer: int: #{int_str}, remaining: #{remaining}")
 
-    int_str
+    String.to_integer(int_str)
   end
 
   def decode(_), do: "Invalid encoded value: not binary"
