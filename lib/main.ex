@@ -21,8 +21,18 @@ defmodule CLI do
 end
 
 defmodule Bencode do
-  def decode(encoded_value) when is_binary(encoded_value) do
+  require Logger
+
+  # def decode(encoded_value) when is_binary(encoded_value) do
+  # def decode(encoded_value) do
+  # Byte strings are formatted as <length>:<content>. To decode them,
+  # first extract the length digits before the colon, then use that length
+  # to capture the exact number of bytes.
+  def decode(<<char, _::binary>> = encoded_value) when char in 48..57 do
+    Logger.debug("Bencode.decode: encoded_value: #{encoded_value}")
+
     binary_data = :binary.bin_to_list(encoded_value)
+    Logger.debug("Bencode.decode: binary_data: #{binary_data}")
 
     case Enum.find_index(binary_data, fn char -> char == 58 end) do
       nil ->
@@ -39,6 +49,16 @@ defmodule Bencode do
         rest = Enum.slice(binary_data, (index + 1)..-1//1)
         List.to_string(rest)
     end
+  end
+
+  # Integers in Bencode are formatted as i<number>e. Use binary pattern matching
+  # to capture everything between "i" and "e".
+  def decode(<<"i", rest::binary>>) do
+    # extract until the "e" marker
+    [int_str, remaining] = String.split(rest, "e", parts: 2)
+    Logger.debug("Bencode.decode: decoding integer: int: #{int_str}, remaining: #{remaining}")
+
+    int_str
   end
 
   def decode(_), do: "Invalid encoded value: not binary"
