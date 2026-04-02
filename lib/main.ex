@@ -56,7 +56,7 @@ defmodule Bencode do
   def decode(<<"i", rest::binary>>) do
     # extract until the "e" marker
     [int_str, remaining] = String.split(rest, "e", parts: 2)
-    Logger.debug("Bencode.decode: decoding integer: int: #{int_str}, remaining: #{remaining}")
+    # Logger.debug("Bencode.decode: decoding integer: int: #{int_str}, remaining: #{remaining}")
 
     String.to_integer(int_str)
   end
