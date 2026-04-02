@@ -30,11 +30,9 @@ defmodule Bencode do
   # to capture the exact number of bytes.
   def decode(<<char, _::binary>> = encoded_value) when char in 48..57 do
     # Logger.debug("Bencode.decode: encoded_value: #{encoded_value}")
-    IO.puts("Bencode.decode: encoded_value: #{encoded_value}")
 
     binary_data = :binary.bin_to_list(encoded_value)
     # Logger.debug("Bencode.decode: binary_data: #{binary_data}")
-    IO.puts("Bencode.decode: binary_data: #{binary_data}")
 
     case Enum.find_index(binary_data, fn char -> char == 58 end) do
       nil ->
@@ -59,7 +57,6 @@ defmodule Bencode do
     # extract until the "e" marker
     [int_str, remaining] = String.split(rest, "e", parts: 2)
     # Logger.debug("Bencode.decode: decoding integer: int: #{int_str}, remaining: #{remaining}")
-    IO.puts("Bencode.decode: decoding integer: int: #{int_str}, remaining: #{remaining}")
 
     String.to_integer(int_str)
   end
